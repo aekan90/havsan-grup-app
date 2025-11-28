@@ -59,12 +59,12 @@
 
 ### **4.1. Preloader (Açılış Senaryosu)**
 
-* **Referans:** Temper Group açılış animasyonu.  
+* **Referans:** Minimalist ve modern açılış animasyonu.  
 * **Akış:**  
-  1. Simsiyah ekranda üstten "HAVSAN" yazısı, alttan "Grup" yazısı merkeze doğru kayarak gelir.  
-  2. Merkezde birleşip tam logoyu oluşturdukları an (1.5 \- 2sn), arka planda assets yüklenmesi tamamlanır.  
-  3. Logo fade-out olurken, "HAVSAN Grup" yazısı minimalleşir ve altında sosyal medya ikonları (WhatsApp, Instagram, LinkedIn) 1 saniye belirir ve kaybolur.  
-  4. Landing Page sahneye girer.
+  1. Simsiyah ekranda "HAVSAN" yazısı fade-in ve scale animasyonuyla beliririr (0-1.2sn).  
+  2. Ardından "Grup" yazısı alttan yukarı kayarak fade-in olur (1.2-2.2sn).  
+  3. İnce bir çizgi divider belirir ve hemen ardından "Robotik | Yapay Zeka | Enerji" ifadesi her kelime sırayla renklerine geçerek görünür (2.2-3.5sn).  
+  4. Tüm elementler fade-out olur ve Landing Page sahneye girer (3.5-4sn).
 
 ### **4.2. Landing Page (Ana Karşılama)**
 

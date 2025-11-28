@@ -1,12 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Preloader from "@/components/Preloader";
 
 export default function Home() {
-  const [showPreloader, setShowPreloader] = useState(true);
+  const [showPreloader, setShowPreloader] = useState(false);
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Preloader'ı sadece ilk ziyarette göster
+    const hasVisited = sessionStorage.getItem("hasVisited");
+    
+    if (!hasVisited) {
+      setShowPreloader(true);
+      sessionStorage.setItem("hasVisited", "true");
+    }
+  }, []);
 
   const cards = [
     {
@@ -17,6 +27,8 @@ export default function Home() {
       color: "from-robotik-blue to-robotik-navy",
       glowColor: "rgba(66, 133, 244, 0.3)",
       route: "/robotik",
+      bgImage: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?q=80&w=2070",
+      logo: "/assets/logos/LOGO-BASE.png adlı dosyanın kopyası.png",
     },
     {
       id: "ai",
@@ -26,6 +38,8 @@ export default function Home() {
       color: "from-ai-blue via-ai-purple to-ai-coral",
       glowColor: "rgba(78, 133, 235, 0.3)",
       route: "/yapay-zeka",
+      bgImage: "https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=2070",
+      logo: "/assets/logos/yapayzeka_logo-removebg-preview.png",
     },
     {
       id: "enerji",
@@ -35,6 +49,8 @@ export default function Home() {
       color: "from-enerji-mustard via-enerji-orange1 to-enerji-vermillion",
       glowColor: "rgba(243, 194, 66, 0.3)",
       route: "/enerji",
+      bgImage: "https://images.unsplash.com/photo-1509391366360-2e959784a276?q=80&w=2072",
+      logo: "/assets/logos/LOGO-BASE-BEYAZ.png adlı dosyanın kopyası.png",
     },
   ];
 
@@ -72,10 +88,38 @@ export default function Home() {
               onMouseLeave={() => setHoveredCard(null)}
               onClick={() => handleCardClick(card.id, card.route)}
             >
-              {/* Gradient Background */}
+              {/* Background Image with Animation */}
+              <div className="absolute inset-0 overflow-hidden">
+                <motion.div
+                  className="absolute inset-0 w-full h-full bg-cover bg-center"
+                  style={{
+                    backgroundImage: `url(${card.bgImage})`,
+                  }}
+                  animate={{
+                    scale: hoveredCard === card.id ? 1.2 : 1.1,
+                    x: card.id === "robotik" ? [0, -25, 0] : card.id === "ai" ? [0, 20, 0] : [0, 18, 0],
+                    y: card.id === "robotik" ? [0, 18, 0] : card.id === "ai" ? [0, -25, 0] : [0, -20, 0],
+                  }}
+                  transition={{
+                    scale: { duration: 0.6, ease: "easeOut" },
+                    x: { duration: card.id === "enerji" ? 12 : card.id === "ai" ? 10 : 8, repeat: Infinity, ease: "easeInOut" },
+                    y: { duration: card.id === "enerji" ? 14 : card.id === "ai" ? 11 : 9, repeat: Infinity, ease: "easeInOut" },
+                  }}
+                />
+              </div>
+
+              {/* Filter Overlay */}
+              <div 
+                className="absolute inset-0 transition-all duration-700"
+                style={{
+                  backgroundColor: hoveredCard === card.id ? "rgba(0,0,0,0.3)" : "rgba(0,0,0,0.6)",
+                }}
+              />
+
+              {/* Gradient Overlay */}
               <div
-                className={`absolute inset-0 bg-gradient-to-br ${card.color} opacity-20 transition-opacity duration-500 ${
-                  hoveredCard === card.id ? "opacity-40" : ""
+                className={`absolute inset-0 bg-gradient-to-br ${card.color} opacity-30 transition-opacity duration-500 ${
+                  hoveredCard === card.id ? "opacity-50" : ""
                 }`}
               />
 
@@ -199,16 +243,44 @@ export default function Home() {
               onClick={() => handleCardClick(card.id, card.route)}
               whileTap={{ scale: 0.98 }}
             >
-              {/* Gradient Background */}
+              {/* Background Image with Animation */}
+              <div className="absolute inset-0 overflow-hidden">
+                <motion.div
+                  className="absolute inset-0 w-full h-full bg-cover bg-center"
+                  style={{
+                    backgroundImage: `url(${card.bgImage})`,
+                  }}
+                  animate={{
+                    scale: [1.1, 1.15, 1.1],
+                    x: card.id === "robotik" ? [0, -18, 0] : card.id === "ai" ? [0, 15, 0] : [0, 12, 0],
+                    y: card.id === "robotik" ? [0, 15, 0] : card.id === "ai" ? [0, -18, 0] : [0, -15, 0],
+                  }}
+                  transition={{
+                    scale: { duration: 10, repeat: Infinity, ease: "easeInOut" },
+                    x: { duration: card.id === "enerji" ? 11 : card.id === "ai" ? 8 : 7, repeat: Infinity, ease: "easeInOut" },
+                    y: { duration: card.id === "enerji" ? 13 : card.id === "ai" ? 9 : 8, repeat: Infinity, ease: "easeInOut" },
+                  }}
+                />
+              </div>
+
+              {/* Filter Overlay */}
+              <div 
+                className="absolute inset-0"
+                style={{
+                  backgroundColor: "rgba(0,0,0,0.5)",
+                }}
+              />
+
+              {/* Gradient Overlay */}
               <div
-                className={`absolute inset-0 bg-gradient-to-br ${card.color} opacity-30`}
+                className={`absolute inset-0 bg-gradient-to-br ${card.color} opacity-40`}
               />
 
               {/* Content */}
               <div className="relative z-10 h-full flex flex-col items-center justify-center p-6">
-                <h2 className="text-4xl font-bold mb-2 text-white">{card.title}</h2>
-                <p className="text-lg text-gray-300 text-center">{card.subtitle}</p>
-                <p className="text-sm text-gray-400 text-center mt-3 max-w-xs">
+                <h2 className="text-4xl font-bold mb-2 text-white drop-shadow-lg">{card.title}</h2>
+                <p className="text-lg text-gray-200 text-center drop-shadow-md">{card.subtitle}</p>
+                <p className="text-sm text-gray-300 text-center mt-3 max-w-xs drop-shadow-md">
                   {card.description}
                 </p>
               </div>
