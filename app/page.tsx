@@ -7,6 +7,7 @@ import Preloader from "@/components/Preloader";
 export default function Home() {
   const [showPreloader, setShowPreloader] = useState(false);
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
+  const [selectedImages, setSelectedImages] = useState<{[key: string]: string}>({});
 
   useEffect(() => {
     // Preloader'ı sadece ilk ziyarette göster
@@ -27,7 +28,13 @@ export default function Home() {
       color: "from-robotik-blue to-robotik-navy",
       glowColor: "rgba(66, 133, 244, 0.3)",
       route: "/robotik",
-      bgImage: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?q=80&w=2070",
+      bgImages: [
+        "https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=2070", // Arduino board close-up
+        "https://images.unsplash.com/photo-1581092160562-40aa08e78837?q=80&w=2070", // Circuit board with components
+        "https://images.unsplash.com/photo-1553406830-ef2513450d76?q=80&w=2070", // Kids learning robotics
+        "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?q=80&w=2070", // STEM education concept
+        "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=2070", // Robot arm technology
+      ],
       logo: "/assets/logos/LOGO-BASE.png adlı dosyanın kopyası.png",
     },
     {
@@ -38,7 +45,13 @@ export default function Home() {
       color: "from-ai-blue via-ai-purple to-ai-coral",
       glowColor: "rgba(78, 133, 235, 0.3)",
       route: "/yapay-zeka",
-      bgImage: "https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=2070",
+      bgImages: [
+        "https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=2070", // AI brain visualization
+        "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=2070", // Neural network
+        "https://images.unsplash.com/photo-1639322537228-f710d846310a?q=80&w=2070", // Data visualization
+        "https://images.unsplash.com/photo-1555949963-aa79dcee981c?q=80&w=2070", // Code on screen
+        "https://images.unsplash.com/photo-1526628953301-3e589a6a8b74?q=80&w=2070", // AI abstract illustration
+      ],
       logo: "/assets/logos/yapayzeka_logo-removebg-preview.png",
     },
     {
@@ -49,10 +62,26 @@ export default function Home() {
       color: "from-enerji-mustard via-enerji-orange1 to-enerji-vermillion",
       glowColor: "rgba(243, 194, 66, 0.3)",
       route: "/enerji",
-      bgImage: "https://images.unsplash.com/photo-1509391366360-2e959784a276?q=80&w=2072",
+      bgImages: [
+        "https://images.unsplash.com/photo-1509391366360-2e959784a276?q=80&w=2072", // Solar panels field
+        "https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?q=80&w=2070", // Solar panels with sun
+        "https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?q=80&w=2070", // Solar farm aerial view
+        "https://images.unsplash.com/photo-1466611653911-95081537e5b7?q=80&w=2070", // Green energy field
+        "https://images.unsplash.com/photo-1497435907256-8742e1d0f6ce?q=80&w=2070", // Renewable energy landscape
+      ],
       logo: "/assets/logos/LOGO-BASE-BEYAZ.png adlı dosyanın kopyası.png",
     },
   ];
+
+  // Rastgele görsel seçimi - component mount olduğunda bir kere çalışır
+  useEffect(() => {
+    const images: {[key: string]: string} = {};
+    cards.forEach(card => {
+      const randomIndex = Math.floor(Math.random() * card.bgImages.length);
+      images[card.id] = card.bgImages[randomIndex];
+    });
+    setSelectedImages(images);
+  }, []);
 
   const handleCardClick = (cardId: string, route: string) => {
     console.log(`Kart tıklandı: ${cardId}`);
@@ -60,7 +89,8 @@ export default function Home() {
     // TODO: Gerçek routing eklenecek
   };
 
-  if (showPreloader) {
+  // Görseller yüklenene kadar preloader göster
+  if (showPreloader || Object.keys(selectedImages).length === 0) {
     return <Preloader onComplete={() => setShowPreloader(false)} />;
   }
 
@@ -89,11 +119,11 @@ export default function Home() {
               onClick={() => handleCardClick(card.id, card.route)}
             >
               {/* Background Image with Animation */}
-              <div className="absolute inset-0 overflow-hidden">
+              <div className="absolute inset-0 overflow-hidden bg-black">
                 <motion.div
                   className="absolute inset-0 w-full h-full bg-cover bg-center"
                   style={{
-                    backgroundImage: `url(${card.bgImage})`,
+                    backgroundImage: `url(${selectedImages[card.id] || card.bgImages[0]})`,
                   }}
                   animate={{
                     scale: hoveredCard === card.id ? 1.2 : 1.1,
@@ -244,11 +274,11 @@ export default function Home() {
               whileTap={{ scale: 0.98 }}
             >
               {/* Background Image with Animation */}
-              <div className="absolute inset-0 overflow-hidden">
+              <div className="absolute inset-0 overflow-hidden bg-black">
                 <motion.div
                   className="absolute inset-0 w-full h-full bg-cover bg-center"
                   style={{
-                    backgroundImage: `url(${card.bgImage})`,
+                    backgroundImage: `url(${selectedImages[card.id] || card.bgImages[0]})`,
                   }}
                   animate={{
                     scale: [1.1, 1.15, 1.1],
